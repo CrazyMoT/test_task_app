@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka-topics-init:
+    build: kafka_create_topics
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+
+  data_collector_service:
+    build:
+      context: .
+      dockerfile: src/modules/data_collector_service/Dockerfile
+    container_name: data_collector_service
+    volumes:
+      - ./src/modules/shared:/data_collector_service/shared
+    environment:
+      KAFKA_BROKER: kafka:9092
+    ports:
+      - "5001:5001"
+    depends_on:
+      - kafka
+
+  data_processor_service:
+    build:
+      context: .
+      dockerfile: src/modules/data_processor_service/Dockerfile
+    container_name: data_processor_service
+    volumes:
+      - ./shared:/shared
+    environment:
+      KAFKA_BROKER: kafka:9092
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    depends_on:
+      - kafka
+      - postgres
+
+  analytics_service:
+    build:
+      context: .
+      dockerfile: src/modules/analytics_service/Dockerfile
+    container_name: analytics_service
+    volumes:
+      - ./src/modules/shared:/analytics_service/shared
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5002:5002"
+    depends_on:
+      - postgres
+
+  notification_service:
+    build:
+      context: .
+      dockerfile: src/modules/notification_service/Dockerfile
+    container_name: notification_service
+    volumes:
+      - ./shared:/shared
+    environment:
+      KAFKA_BROKER: kafka:9092
+    ports:
+      - "5003:5003"
+    depends_on:
+      - kafka
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3001"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+volumes:
+  postgres_data:
