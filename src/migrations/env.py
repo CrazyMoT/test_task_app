@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.modules.shared.config import Config
+from src.modules.common.config import Config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -21,13 +21,16 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from src.modules.shared.models.models import Transaction, Product
-from src.modules.analytics_service.models.models import *
-from src.modules.shared.models.models import Base
+from src.modules.analytics_service.models.models import Analytics, AnalyticsSettings
+from src.modules.common.models.models import Transaction, Product, Base as MainBase
+from src.modules.data_processor_service.models.models import Trash, Base as ProcBase
 
-target_metadata = Base.metadata
 
-config.get_main_option('sqlalchemy.url', Config.DATABASE_URL + '?async_fallback=True')
+# Объединяем метаданные всех баз в список
+target_metadata = [MainBase.metadata, ProcBase.metadata]
+
+
+config.set_main_option('sqlalchemy.url', Config.DATABASE_URL + '?async_fallback=True')
 
 
 def run_migrations_offline() -> None:

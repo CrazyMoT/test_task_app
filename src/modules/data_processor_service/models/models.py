@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer
+
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
+
 
 class Trash(Base):
     __tablename__ = 'products'

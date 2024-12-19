@@ -1,7 +1,9 @@
-from src.modules.shared.schemas.schemas import Sale
-from src.modules.shared.database import get_session
-from models import Trash
+from ..models.models import Trash
 from datetime import datetime
+
+from modules.common.schemas.schemas import Sale
+from modules.common.services.database import get_session
+
 
 async def process_data(data: dict) -> Sale:
     async with get_session() as session:

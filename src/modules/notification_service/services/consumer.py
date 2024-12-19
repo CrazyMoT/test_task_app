@@ -1,12 +1,12 @@
 import asyncio
 from confluent_kafka import Consumer, KafkaError
-from config import settings
-from notifier import handle_notification
+from modules.notification_service.config import settings
+from .notifier import handle_notification
 
 
 def create_consumer():
     consumer = Consumer({
-        'bootstrap.servers': settings.kafka_bootstrap_servers,
+        'bootstrap.servers': settings.kafka_broker,
         'group.id': 'notification_service_group',
         'auto.offset.reset': 'earliest'
     })

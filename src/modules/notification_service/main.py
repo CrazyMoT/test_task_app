@@ -1,4 +1,4 @@
-from consumer import start_consume
+from services.consumer import start_consume
 import asyncio
 
 

@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, Float, DateTime, ForeignKey
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+from modules.common.models.models import Base
+
 
 
 class Analytics(Base):

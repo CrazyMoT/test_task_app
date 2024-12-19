@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Query
 from typing import Union, List
 
-from models.report_fetcher_database import ReportFetcher
-from schemas import SaleReportWithProductName
+from modules.analytics_service.services.report_fetcher_database import ReportFetcher
+from modules.analytics_service.schemas.schemas import SaleReportWithProductName
 
 router = APIRouter()
 

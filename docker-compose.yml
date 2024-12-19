@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5433:5433"
+      - "5433:5432"
 
   kafka:
     image: wurstmeister/kafka:latest
@@ -44,7 +44,8 @@ services:
       dockerfile: src/modules/data_collector_service/Dockerfile
     container_name: data_collector_service
     volumes:
-      - ./src/modules/shared:/data_collector_service/shared
+      - ./src/modules/common:/data_collector_service/common
+      - logs_volume:/var/log/data_collector_service
     environment:
       KAFKA_BROKER: kafka:9092
     ports:
@@ -58,7 +59,8 @@ services:
       dockerfile: src/modules/data_processor_service/Dockerfile
     container_name: data_processor_service
     volumes:
-      - ./shared:/shared
+      - ./common:/common
+      - logs_volume:/var/log/data_processor_service
     environment:
       KAFKA_BROKER: kafka:9092
       POSTGRES_HOST: postgres
@@ -75,7 +77,8 @@ services:
       dockerfile: src/modules/analytics_service/Dockerfile
     container_name: analytics_service
     volumes:
-      - ./src/modules/shared:/analytics_service/shared
+      - ./src/modules/common:/analytics_service/common
+      - logs_volume:/var/log/data_processor_service
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_DB: database
@@ -92,7 +95,8 @@ services:
       dockerfile: src/modules/notification_service/Dockerfile
     container_name: notification_service
     volumes:
-      - ./shared:/shared
+      - ./src/modules/common:/analytics_service/common
+      - logs_volume:/var/log/data_processor_service
     environment:
       KAFKA_BROKER: kafka:9092
     ports:
@@ -112,9 +116,10 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3001:3001"
+      - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 
 volumes:
   postgres_data:
+  logs_volume:

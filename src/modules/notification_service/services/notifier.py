@@ -1,5 +1,4 @@
-
-from config import settings
+from modules.notification_service.config import settings
 
 async def handle_notification(data):
     sales = int(data)

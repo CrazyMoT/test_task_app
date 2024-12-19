@@ -1,20 +1,19 @@
 FROM python:3.11-slim
 
-WORKDIR /data_collector_service
+WORKDIR /src
 
 # Установка зависимостей
 COPY ../../../requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копирование только содержимого папки data_collector_service
-COPY ./src/modules/data_collector_service/ .
+COPY ./src/modules/data_collector_service /src/modules/data_collector_service
 
 # Копирование общих файлов
-COPY ./src/modules/shared /shared
+COPY ./src/modules/common /src/modules/common
 
-# Настройка PYTHONPATH для доступа к общим модулям
-ENV PYTHONPATH="${PYTHONPATH}:/shared:/data_collector_service"
+# Установка PYTHONPATH для доступа к модулям из src
+ENV PYTHONPATH="${PYTHONPATH}:/src"
 
 # Запуск приложения
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001"]
-#CMD ["sleep", "6600"]
+CMD ["python", "/src/modules/data_collector_service/main.py"]

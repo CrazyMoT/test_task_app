@@ -1,8 +1,9 @@
-from src.modules.shared.models.models import Transaction
-from src.modules.shared.database import get_session
-from src.modules.data_processor_service.logger import logger
+from modules.data_processor_service.logger import logger
 
-from src.modules.shared.schemas.schemas import Sale
+
+from modules.common.models.models import Transaction
+from modules.common.services.database import get_session
+from modules.common.schemas.schemas import Sale
 
 
 async def write_to_postgres(data: Sale):

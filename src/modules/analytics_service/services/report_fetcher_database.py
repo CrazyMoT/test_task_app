@@ -1,12 +1,13 @@
-from shared.models.models import Product
-from .models import Analytics
-from schemas import SaleReportWithProductName
-from shared.database import get_session
-
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
-
 from typing import List
+
+from modules.analytics_service.models.models import Analytics
+from modules.analytics_service.schemas.schemas import SaleReportWithProductName
+
+from modules.common.models.models import Product
+from modules.common.services.database import get_session
+
 
 class ReportFetcher:
     async def get_latest_report(self, product_id: int = None) -> SaleReportWithProductName | None:

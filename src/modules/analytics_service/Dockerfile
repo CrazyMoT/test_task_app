@@ -1,19 +1,19 @@
 FROM python:3.11-slim
 
-WORKDIR /analytics_service
+WORKDIR /src
 
 
 COPY ../../../requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Убедитесь, что контекст сборки правильный, и путь копирования соответствует
-COPY ./src/modules/analytics_service /analytics_service
+COPY ./src/modules/analytics_service /src/modules/analytics_service
 
 # Копирование общих файлов
-COPY ./src/modules/shared /shared
+COPY ./src/modules/common /src/modules/common
 
-# Настройка PYTHONPATH для доступа к общим модулям
-ENV PYTHONPATH="${PYTHONPATH}:/shared:/analytics_service"
+# Установка PYTHONPATH для доступа к модулям из src
+ENV PYTHONPATH="${PYTHONPATH}:/src"
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5002"]
+CMD ["python", "/src/modules/analytics_service/main.py"]
 #CMD ["sleep", "6600"]

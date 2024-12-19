@@ -1,9 +1,11 @@
 from confluent_kafka import Consumer, KafkaException, KafkaError
 import json
-from config import Config
-from data_processing import process_data
-from postgres_writer import write_to_postgres
-from logger import logger
+from modules.data_processor_service.config import Config
+from modules.data_processor_service.logger import logger
+
+from .data_processing import process_data
+from .postgres_writer import write_to_postgres
+
 
 async def consume():
     conf = {

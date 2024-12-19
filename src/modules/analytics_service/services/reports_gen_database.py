@@ -1,9 +1,9 @@
-from shared.models.models import Transaction
-from shared.database import get_session
+from modules.common.models.models import Transaction
+from modules.common.services.database import get_session
 
-from models import Analytics
-from ..logger import logger
-from ..schemas import SaleReport
+from modules.analytics_service.models.models import Analytics
+from modules.analytics_service.logger import logger
+from modules.analytics_service.schemas.schemas import SaleReport
 
 from sqlalchemy.future import select
 from sqlalchemy import func

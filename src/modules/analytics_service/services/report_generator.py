@@ -1,9 +1,8 @@
-from logger import logger
-from schemas import SaleReport
-import asyncio
+from modules.analytics_service.logger import logger
+from modules.analytics_service.schemas.schemas import SaleReport
 import datetime
 
-from models.reports_gen_database import ReportGenerator
+from modules.analytics_service.services.reports_gen_database import ReportGenerator
 
 
 def get_day_boundaries():
