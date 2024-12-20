@@ -6,7 +6,7 @@ def test_analytics():
     }
 
     url = "http://localhost:5002/sales/daily_sales"
-    response = requests.post(url, json=sale)
+    response = requests.get(url, json=sale)
     print(response.text)
     assert response.status_code == 200
 

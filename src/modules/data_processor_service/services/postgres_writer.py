@@ -1,6 +1,5 @@
 from modules.data_processor_service.logger import logger
 
-
 from modules.common.models.models import Transaction
 from modules.common.services.database import get_session
 from modules.common.schemas.schemas import Sale

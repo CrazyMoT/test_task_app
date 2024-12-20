@@ -21,12 +21,11 @@ import os
 #     assert response.json() == {"status": "success", "message": "Sale data sent to Kafka"}
 
 import requests
-import datetime
 
 def test_collect_sales():
     sale = {
         "transaction_id": 12345,
-        "product_id": 54321,
+        "product_id": 1,
         'quantity': 1,
         "amount": 100.0,
         "timestamp": "2024-12-14T12:00:00Z"

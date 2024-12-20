@@ -29,9 +29,13 @@ class ReportFetcher:
 
     async def get_latest_reports(self) -> List[SaleReportWithProductName]:
         async with get_session() as session:
-            query = select(Analytics).options(joinedload(Product.name)).order_by(Analytics.timestamp.desc())
+            query = select(Analytics).options(joinedload(Analytics.product)).order_by(Analytics.timestamp.desc())
             result = await session.execute(query)
             reports = result.scalars().all()
+
+            if not reports:
+                return []
+
             latest_reports = {}
             for report in reports:
                 if report.product_id not in latest_reports:

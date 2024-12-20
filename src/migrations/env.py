@@ -20,17 +20,18 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+config.set_main_option('sqlalchemy.url',
+                       'postgresql+asyncpg://user:password@localhost:5433/database?async_fallback=True')
 
-from src.modules.analytics_service.models.models import Analytics, AnalyticsSettings
-from src.modules.common.models.models import Transaction, Product, Base as MainBase
+
+from src.modules.common.models.models import Transaction, Product, Base as CommonBase
+from src.modules.analytics_service.models.models import Analytics, AnalyticsSettings, Base as AnalyticsBase
 from src.modules.data_processor_service.models.models import Trash, Base as ProcBase
 
 
 # Объединяем метаданные всех баз в список
-target_metadata = [MainBase.metadata, ProcBase.metadata]
+target_metadata = [AnalyticsBase.metadata, ProcBase.metadata]
 
-
-config.set_main_option('sqlalchemy.url', Config.DATABASE_URL + '?async_fallback=True')
 
 
 def run_migrations_offline() -> None:

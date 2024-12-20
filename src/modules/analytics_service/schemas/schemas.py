@@ -15,7 +15,7 @@ class SaleReportList(BaseModel):
 
 class SaleReportWithProductName(BaseModel):
     product_name: str
-    total_sales: int
+    total_sales: float
     average_purchase_value: float
     timestamp: datetime
 

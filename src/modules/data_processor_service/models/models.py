@@ -6,6 +6,6 @@ Base = declarative_base()
 
 
 class Trash(Base):
-    __tablename__ = 'products'
-    product_id = Column(Integer, primary_key=True, autoincrement=True)
-    trashold = Column(Integer, nullable=False)
+    __tablename__ = 'trash'
+    t_id = Column(Integer, primary_key=True, autoincrement=True)
+    trashold = Column(Integer, default=1, nullable=False)

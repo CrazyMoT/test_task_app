@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship, declarative_base
 
+
 Base = declarative_base()
 
 class Product(Base):
@@ -11,6 +12,8 @@ class Product(Base):
     price = Column(Float, nullable=False)
 
     transactions = relationship("Transaction", back_populates="product")
+    analytics = relationship('Analytics', back_populates='product')
+
 
 class Transaction(Base):
     __tablename__ = 'transactions'
