@@ -67,6 +67,8 @@ services:
       POSTGRES_DB: database
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+    ports:
+      - "5004:5004"
     depends_on:
       - kafka
       - postgres
@@ -99,10 +101,15 @@ services:
       - logs_volume:/var/log/data_processor_service
     environment:
       KAFKA_BROKER: kafka:9092
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
       - "5003:5003"
     depends_on:
       - kafka
+      - postgres
 
   prometheus:
     image: prom/prometheus:latest

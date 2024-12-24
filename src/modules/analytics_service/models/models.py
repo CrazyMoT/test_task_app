@@ -1,19 +1,7 @@
-from sqlalchemy import Column, Integer, Float, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer
+from sqlalchemy.orm import declarative_base
 
-from modules.common.models.models import Base
-
-
-class Analytics(Base):
-    __tablename__ = 'analytics'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-
-    product_id = Column(Integer, ForeignKey('products.product_id'))
-    total_sales = Column(Float)
-    average_purchase_value = Column(Float)
-    timestamp = Column(DateTime)
-
-    product = relationship("Product")
+Base = declarative_base()
 
 
 class AnalyticsSettings(Base):

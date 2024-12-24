@@ -1,6 +1,6 @@
-from modules.common.models.models import Product, Transaction
-from modules.analytics_service.models.models import Analytics
-from modules.data_processor_service.models.models import Trash
+from modules.common.models.models import Product, Transaction, Analytics
+from modules.analytics_service.models.models import AnalyticsSettings
+from modules.notification_service.models.models import Trash
 from datetime import datetime, timedelta
 import random
 import asyncio
@@ -64,6 +64,18 @@ async def add_trash():
         # Сохраняем изменения в базе данных
         await session.commit()
 
+
+async def add_analys_settings():
+    async with async_session() as session:
+        new_trash = AnalyticsSettings(minimum_sales=1)
+
+        # Добавляем запись в сессию
+        session.add(new_trash)
+
+        # Сохраняем изменения в базе данных
+        await session.commit()
+
 if __name__ == '__main__':
-    asyncio.run(add_test_data())  # Если вы хотите запустить отдельно в асинхронной среде
+    # asyncio.run(add_test_data())  # Если вы хотите запустить отдельно в асинхронной среде
     # asyncio.run(add_trash())
+    asyncio.run(add_analys_settings())

@@ -2,6 +2,18 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'prometheus'
+  - job_name: 'data_collector_service'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['data_collector_service:5001']
+
+  - job_name: 'data_processor_service'
+    static_configs:
+      - targets: ['data_processor_service:5004']
+
+  - job_name: 'analytics_service'
+    static_configs:
+      - targets: [ 'analytics_service:5002' ]
+
+  - job_name: 'notification_service'
+    static_configs:
+      - targets: [ 'notification_service:5003' ]

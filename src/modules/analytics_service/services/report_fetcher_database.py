@@ -2,10 +2,9 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from typing import List
 
-from modules.analytics_service.models.models import Analytics
-from modules.analytics_service.schemas.schemas import SaleReportWithProductName
+from modules.common.schemas.schemas import SaleReportWithProductName
 
-from modules.common.models.models import Product
+from modules.common.models.models import Product, Analytics
 from modules.common.services.database import get_session
 
 

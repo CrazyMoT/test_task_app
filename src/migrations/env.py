@@ -5,8 +5,6 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.modules.common.config import Config
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -24,13 +22,14 @@ config.set_main_option('sqlalchemy.url',
                        'postgresql+asyncpg://user:password@localhost:5433/database?async_fallback=True')
 
 
-from src.modules.common.models.models import Transaction, Product, Base as CommonBase
-from src.modules.analytics_service.models.models import Analytics, AnalyticsSettings, Base as AnalyticsBase
-from src.modules.data_processor_service.models.models import Trash, Base as ProcBase
+from src.modules.common.models.models import Base as CommonBase
+from src.modules.analytics_service.models.models import Base as AnalyticsBase
+from modules.notification_service.models.models import Base as ProcBase
 
 
 # Объединяем метаданные всех баз в список
-target_metadata = [AnalyticsBase.metadata, ProcBase.metadata]
+target_metadata = [CommonBase.metadata,
+                   AnalyticsBase.metadata, ProcBase.metadata]
 
 
 

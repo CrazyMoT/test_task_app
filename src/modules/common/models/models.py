@@ -24,3 +24,15 @@ class Transaction(Base):
     timestamp = Column(DateTime, default=func.now())
 
     product = relationship("Product", back_populates="transactions")
+
+
+class Analytics(Base):
+    __tablename__ = 'analytics'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    product_id = Column(Integer, ForeignKey('products.product_id'))
+    total_sales = Column(Float)
+    average_purchase_value = Column(Float)
+    timestamp = Column(DateTime)
+
+    product = relationship("Product", back_populates='analytics')

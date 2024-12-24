@@ -1,27 +1,21 @@
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
+from prometheus_client import generate_latest
+from prometheus_client.exposition import CONTENT_TYPE_LATEST
+from fastapi.responses import PlainTextResponse
+
 import uvicorn
 
-from contextlib import asynccontextmanager
 from modules.analytics_service.routes import daily_sales
-from modules.analytics_service.services.analys_service import daily_analysis
 
 app = FastAPI()
 
 app.include_router(daily_sales.router, prefix="/sales", tags=["sales"])
 
-scheduler = AsyncIOScheduler()
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Запуск планировщика при старте приложения
-    scheduler.add_job(daily_analysis, 'cron', hour=0)  # Запуск каждый день в полночь
-    scheduler.start()
-    yield
-    # Остановка планировщика при завершении работы приложения
-    scheduler.shutdown()
 
-app.router.lifespan = lifespan
+@app.get("/metrics", response_class=PlainTextResponse)
+async def metrics():
+    return PlainTextResponse(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
     # Запускаем сервер FastAPI

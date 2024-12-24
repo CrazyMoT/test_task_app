@@ -1,19 +1,22 @@
-from ..models.models import Trash
-from datetime import datetime
+from modules.data_processor_service.logger import logger
 
+from modules.common.models.models import Transaction
 from modules.common.schemas.schemas import Sale
 from modules.common.services.database import get_session
 
+from sqlalchemy.future import select
+
 
 async def process_data(data: dict) -> Sale:
+    transaction_id = data.get('transaction_id')
+
     async with get_session() as session:
-        trash = await session.get(Trash, ident=1)
+        # Проверка наличия транзакции с данным идентификатором
+        transaction_query = select(Transaction).where(Transaction.transaction_id == transaction_id)
+        result = await session.execute(transaction_query)
+        transaction = result.scalar_one_or_none()
 
-    # Проверка на пограничные кейсы
-    if data['amount'] < trash.trashold:
-        raise ValueError("Amount cannot be negative")
-
-    # Вычисление метрик (если необходимо)
-    data['timestamp'] = datetime.fromisoformat(data['timestamp'])
-
-    return Sale(**data)
+    if transaction is None:
+        return Sale(**data)
+    else:
+        logger.warning(f'Transaction with id {transaction_id} already exists')

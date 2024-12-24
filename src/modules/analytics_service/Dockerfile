@@ -15,5 +15,8 @@ COPY ./src/modules/common /src/modules/common
 # Установка PYTHONPATH для доступа к модулям из src
 ENV PYTHONPATH="${PYTHONPATH}:/src"
 
-CMD ["python", "/src/modules/analytics_service/main.py"]
-#CMD ["sleep", "6600"]
+CMD python /src/modules/analytics_service/main.py & python /src/modules/analytics_service/services/analys_service.py
+
+#CMD ["python", "/src/modules/analytics_service/main.py"]
+#CMD ["python", "/src/modules/analytics_service/services/analys_service.py"]
+##CMD ["sleep", "6600"]

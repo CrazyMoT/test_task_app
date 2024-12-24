@@ -1,7 +1,6 @@
-from modules.common.models.models import Transaction
+from modules.common.models.models import Transaction, Analytics
 from modules.common.services.database import get_session
 
-from modules.analytics_service.models.models import Analytics
 from modules.analytics_service.logger import logger
 from modules.analytics_service.schemas.schemas import SaleReport
 
